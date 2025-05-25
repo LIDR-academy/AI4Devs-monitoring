@@ -72,3 +72,8 @@ Cursor Agent, claude-4-sonnet
 That failed.
 Tell me, what's the advantage to rolling our own as we've been doing now instead of using what datadoc console gave us?
 
+## Prompt #15
+Cursor Agent, claude-4-sonnet
+
+Add a dashboard in datadog to show important metrics from these two servers.
+
