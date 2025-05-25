@@ -1,0 +1,16 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+- **Update the file [datadog-aws-prompts.md](mdc:prompts/datadog-aws-prompts.md)** with each prompt written by me, but only what I ask or inquire about, not your responses, in the usual markdown format. Like this: #Prompt Number, consulted model, and question. Here's an example:
+
+    **Prompt 1:**
+    Cursor Agent, claude-4-sonnet
+
+    ```
+    Analyze the project
+    ```
+
+- Think about what you're going to do **step by step**, and don't complicate things, make simple approaches, and aim for effectiveness
+- If you have doubts **ask me** before doing anything
