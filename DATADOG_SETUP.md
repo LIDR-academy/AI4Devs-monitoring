@@ -2,7 +2,7 @@
 
 ## **Phase 1: Datadog Account Setup**
 
-### Step 1: **Prepare Datadog Account**
+### Step 1: **Prepare Datadog Account** ✅
 1. **Sign up/Login** to [Datadog](https://app.datadoghq.com)
 2. **Get your API Key**:
    - Go to `Organization Settings` → `API Keys`
@@ -16,27 +16,29 @@
 
 ## **Phase 2: AWS Integration Setup**
 
-### Step 2: **Configure AWS Integration in Datadog**
+### Step 2: **Get Your Datadog Keys**
 1. **In Datadog Console**:
-   - Go to `Integrations` → `AWS`
-   - Click `Add AWS Account`
-   - Choose `Role Delegation` (recommended)
-   - **Copy the External ID** (you'll need this!)
+   - Go to `Organization Settings` → `API Keys` 
+   - Copy your API key
+   - Go to `Organization Settings` → `Application Keys`
+   - Create/copy your Application key
+   - **No External ID needed!** (Generated automatically)
 
-### Step 3: **Update OpenTofu Configuration**
+### Step 3: **Set Environment Variables**
 1. **Set your Datadog API key**:
    ```bash
    export TF_VAR_datadog_api_key="your-datadog-api-key-here"
    ```
 
-2. **Set the External ID** (from Step 2):
+2. **Set your Datadog Application key**:
    ```bash
-   export TF_VAR_datadog_external_id="external-id-from-datadog"
+   export TF_VAR_datadog_app_key="your-datadog-app-key-here"
    ```
 
-3. **If using EU Datadog**:
+3. **That's it!** (EU site already configured in variables.tf):
    ```bash
-   export TF_VAR_datadog_site="datadoghq.eu"
+   # Already configured: datadoghq.eu
+   # External ID generated automatically by OpenTofu
    ```
 
 ### Step 4: **Deploy the Updated Infrastructure**
@@ -46,12 +48,17 @@ tofu plan
 tofu apply
 ```
 
-### Step 5: **Complete Datadog AWS Integration**
-1. **After OpenTofu completes**, copy the `datadog_role_arn` from the output
-2. **Back in Datadog Console**:
-   - Paste the Role ARN
-   - Enter the External ID (same as Step 3)
-   - Click `Install Integration`
+### Step 5: **Integration Completes Automatically! 🎉**
+1. **OpenTofu handles everything**:
+   - ✅ Creates the IAM role in AWS
+   - ✅ Configures the integration in Datadog
+   - ✅ Sets up proper permissions
+   - ✅ No manual steps needed!
+
+2. **Check the outputs** for confirmation:
+   - `datadog_role_arn` - The AWS role created
+   - `datadog_integration_details` - Integration info
+
 3. **Wait 5-10 minutes** for data to start flowing
 
 ---
@@ -98,10 +105,11 @@ tofu apply
 ```bash
 # Required
 export TF_VAR_datadog_api_key="your-datadog-api-key"
-export TF_VAR_datadog_external_id="external-id-from-datadog"
+export TF_VAR_datadog_app_key="your-datadog-app-key"
 
-# Optional (defaults shown)
-export TF_VAR_datadog_site="datadoghq.com"  # or "datadoghq.eu"
+# Optional (already configured for EU)
+# TF_VAR_datadog_site is set to "datadoghq.eu" in variables.tf
+# External ID is generated automatically - no manual setup needed!
 ```
 
 ---

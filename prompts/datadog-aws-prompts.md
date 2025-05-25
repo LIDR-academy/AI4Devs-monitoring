@@ -41,3 +41,34 @@ Cursor Agent, claude-4-sonnet
 
 Will this really work? the script runs as ec2-user and needs to do `sudo` a lot, but still tries to write to files in /etc/datadog-agent.
 
+## Prompt #9
+Cursor Agent, claude-4-sonnet
+
+What's the difference between an API key and an application key in datadog?
+
+## Prompt #10
+Cursor Agent, claude-4-sonnet
+
+This option does not exist. I see Cloudformation(recommended), Terraform and Manually.  Wouldn't terraform make a lot of sense here?
+
+## Prompt #11
+Cursor Agent, claude-4-sonnet
+
+So what do I do with the long HCL that Datadog console gives me?
+
+## Prompt #12
+Cursor Agent, claude-4-sonnet
+
+But there is not external id in the console (or even the HCL that it gives me).
+
+## Prompt #13
+Cursor Agent, claude-4-sonnet
+
+Got an error. Could this be because we have two datadog-related files?
+
+## Prompt #14
+Cursor Agent, claude-4-sonnet
+
+That failed.
+Tell me, what's the advantage to rolling our own as we've been doing now instead of using what datadoc console gave us?
+

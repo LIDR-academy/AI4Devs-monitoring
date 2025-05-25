@@ -37,7 +37,14 @@ variable "key_name" {
 variable "datadog_api_key" {
   description = "Datadog API key for agent configuration"
   type        = string
-  default     = ""  # Set this to your actual Datadog API key
+  default     = "f9cb36538debd0742f4760ddf79bc608"  # Set this to your actual Datadog API key
+  sensitive   = true
+}
+
+variable "datadog_app_key" {
+  description = "Datadog Application key for Terraform provider"
+  type        = string
+  default     = ""
   sensitive   = true
 }
 
