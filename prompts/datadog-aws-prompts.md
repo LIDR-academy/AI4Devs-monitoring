@@ -21,3 +21,8 @@ Cursor Agent, claude-4-sonnet
 
 Please update so that EC2 instances use ssh key key-05ae3c3c649ef27c9.
 
+## Prompt #5
+Cursor Agent, claude-4-sonnet
+
+I just ran `tofu plan` (I use opentofu; please note this for the future) and got a couple of warnings at the end. Can you fix them? If it's complicated, just let it be.
+
