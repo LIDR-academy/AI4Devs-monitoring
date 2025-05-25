@@ -26,3 +26,18 @@ Cursor Agent, claude-4-sonnet
 
 I just ran `tofu plan` (I use opentofu; please note this for the future) and got a couple of warnings at the end. Can you fix them? If it's complicated, just let it be.
 
+## Prompt #6
+Cursor Agent, claude-4-sonnet
+
+I ran `tofu apply` and everything worked. I'm surprised since I don't have my AWS keys in the environment. I do have a .env file a couple of levels up, and `aws configure` has the credentials too.  Do you know how `tofu` found the credentials?
+
+## Prompt #7
+Cursor Agent, claude-4-sonnet
+
+outline a step by step procedure for connecting my Datadog account with my AWS setup.
+
+## Prompt #8
+Cursor Agent, claude-4-sonnet
+
+Will this really work? the script runs as ec2-user and needs to do `sudo` a lot, but still tries to write to files in /etc/datadog-agent.
+
