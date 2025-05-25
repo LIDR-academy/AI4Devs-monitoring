@@ -31,5 +31,6 @@ variable "frontend_port" {
 variable "key_name" {
   description = "Name of the AWS key pair to use for EC2 instances"
   type        = string
-  default     = "key-05ae3c3c649ef27c9"
+  # default     = "key-05ae3c3c649ef27c9"
+  default     = "David ed2"
 }
