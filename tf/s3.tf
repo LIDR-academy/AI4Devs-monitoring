@@ -1,6 +1,13 @@
 resource "aws_s3_bucket" "code_bucket" {
-  bucket = "ai4devs-project-code-bucket"
+  bucket = "ai4devs-project-code-${data.aws_caller_identity.current.account_id}"
   acl    = "private"
+
+  tags = {
+    Name        = "AI4DEVs Project Code Bucket"
+    Environment = var.environment
+    Project     = var.datadog_tags["project"]
+    ManagedBy   = var.datadog_tags["managed_by"]
+  }
 }
 
 resource "null_resource" "generate_zip" {
