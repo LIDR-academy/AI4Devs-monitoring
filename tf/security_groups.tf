@@ -1,6 +1,7 @@
 resource "aws_security_group" "backend_sg" {
   name        = "lti-project-backend-sg"
   description = "Allow HTTP and SSH access"
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     from_port   = 22
@@ -27,6 +28,7 @@ resource "aws_security_group" "backend_sg" {
 resource "aws_security_group" "frontend_sg" {
   name        = "lti-project-frontend-sg"
   description = "Allow HTTP and SSH access"
+  vpc_id      = aws_vpc.main.id
 
   ingress {
     from_port   = 22

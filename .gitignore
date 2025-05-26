@@ -29,3 +29,15 @@ yarn-error.log*
 .vscode
 
 # .env
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
+crash.*.log
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
