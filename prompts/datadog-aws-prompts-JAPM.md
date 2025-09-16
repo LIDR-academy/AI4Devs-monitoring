@@ -98,3 +98,37 @@ Desplegar el backend y frontend del proyecto [AI4Devs-monitoring](https://github
 
 Antes de realizar la tarea revisa mis requisitos ¿hay algo que me este faltando considerar?
 Hazme preguntas si necesitas más información.
+
+
+
+
+
+
+Eres un experto en Ingenieria de Prompts y en DevSecOps
+# Contexto Inicial
+Tenemos un proyecto listo que se enfoca en el reclutamiento de candidatos, ahora buscamos simular el despliegue del proyecto completo en la nube de AWS mediante el uso de LocalStack
+
+# Intrucciones generales
+Tu tarea es generar un prompt para el chatboot (ChatGPT 4.1) que me ayude a simular el despliegue del backend y frontend de mi proyecto en LocalStack para simular AWS mediante terraform cumpliendo con las siguientes instrucciones
+
+# Instrucciones
+- La infraestructura consta de una instancias EC2 del tipo t2.micro
+- Tendras que hacer checkout del proyecto mediante git desde la siguiente url del proyecto: `https://github.com/rockeroicantonidev/AI4Devs-monitoring.git`, no requieres crendiales ya que el repositorio es publico
+- el backend debe ser accesible por medio del puerto 8080
+- el frontend debe ser accesible por medio del puerto 3000
+- No es necesario solicitar nombres de keys ya que ya se encuentran configuradas con aws configure
+- Utiliza terraform en la carpeta @tf
+
+# Mejores practicas
+- Incluye el rol en el que debe actual el chatbot
+
+# Consideraciones adicionales
+- El chatbot tendrá acceso al codigo del proyecto para implementar la configuracion correctamente.
+- Estoy utilizando Windows 11
+- Tengo instalado Terraform pero no tengo instalado Python
+
+# Pautas para generar el contenido
+1. El formato de salida va ser un archivo con extensión .md y el contenido en formato Markdown
+
+Antes de generar el prompt revisa mis instrucciones ¿me esta faltando algo por considerar?
+Realiza preguntas si necesitas mas información.
