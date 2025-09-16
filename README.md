@@ -65,22 +65,22 @@ cd ../backend
 npm install
 ```
 3. Construye el servidor backend:
-```
+```sh
 cd backend
 npm run build
 ````
 4. Inicia el servidor backend:
-```
+```sh
 cd backend
 npm start
 ```
 5. En una nueva ventana de terminal, construye el servidor frontend:
-```
+```sh
 cd frontend
 npm run build
 ```
 6. Inicia el servidor frontend:
-```
+```sh
 cd frontend
 npm start
 ```
@@ -94,7 +94,7 @@ Este proyecto usa Docker para ejecutar una base de datos PostgreSQL. Así es có
 Instala Docker en tu máquina si aún no lo has hecho. Puedes descargarlo desde aquí.
 Navega al directorio raíz del proyecto en tu terminal.
 Ejecuta el siguiente comando para iniciar el contenedor Docker:
-```
+```sh
 docker-compose up -d
 ```
 Esto iniciará una base de datos PostgreSQL en un contenedor Docker. La bandera -d corre el contenedor en modo separado, lo que significa que se ejecuta en segundo plano.
@@ -109,7 +109,7 @@ Para acceder a la base de datos PostgreSQL, puedes usar cualquier cliente Postgr
 Por favor, reemplaza User, Password y Database con el usuario, la contraseña y el nombre de la base de datos reales especificados en tu archivo .env.
 
 Para detener el contenedor Docker, ejecuta el siguiente comando:
-```
+```sh
 docker-compose down
 ```
 
@@ -120,7 +120,7 @@ Para generar la base de datos utilizando Prisma, sigue estos pasos:
 2. Abre una terminal y navega al directorio del backend donde se encuentra el archivo `schema.prisma` y `seed.ts`.
 
 3. Ejecuta los siguientes comandos para generar la estructura de prisma, las migraciones a tu base de datos y poblarla con datos de ejemplo:
-```
+```sh
 npx prisma generate
 npx prisma migrate dev
 ts-node seed.ts
@@ -128,7 +128,7 @@ ts-node seed.ts
 
 Una vez has dado todos los pasos, deberías poder guardar nuevos candidatos, tanto via web, como via API, verlos en la base de datos y obtenerlos mediante GET por id. 
 
-```
+```json
 POST http://localhost:3010/candidates
 {
     "firstName": "Albert",
