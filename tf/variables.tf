@@ -13,3 +13,15 @@ variable "allowed_ports" {
   type        = list(number)
   default     = [22, 8080, 3000]
 }
+
+variable "datadog_api_key" {
+  description = "API Key de DataDog"
+  type        = string
+  sensitive   = true
+}
+
+variable "datadog_app_key" {
+  description = "Application Key de DataDog"
+  type        = string
+  sensitive   = true
+}

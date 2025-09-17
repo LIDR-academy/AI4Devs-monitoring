@@ -10,3 +10,22 @@ provider "aws" {
     sts = "http://localhost:4566"
   }
 }
+
+provider "datadog" {
+  api_key = var.datadog_api_key
+  app_key = var.datadog_app_key
+  api_url = "https://api.datadoghq.com/" 
+}
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.13.0"
+    }
+    datadog = {
+      source  = "DataDog/datadog"
+      version = "~> 3.30.0"
+    }
+  }
+}

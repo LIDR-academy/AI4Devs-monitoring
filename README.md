@@ -160,3 +160,69 @@ POST http://localhost:3010/candidates
 }
 ```
 
+# Despliegue Local Simulado con LocalStack y Terraform
+
+Este proyecto puede simular el despliegue de infraestructura AWS (EC2 y Security Groups) usando [LocalStack](https://github.com/localstack/localstack) y [Terraform](https://www.terraform.io/) en tu máquina local. Los servicios (backend y frontend) se ejecutan en tu entorno Windows, simulando estar en una instancia EC2.
+
+## Requisitos Previos
+
+- Docker instalado y en ejecución.
+- LocalStack instalado como contenedor Docker.
+- Node.js y npm instalados.
+- Terraform instalado.
+- AWS CLI instalado (opcional, para inspección de recursos simulados).
+
+## Pasos para el despliegue local
+
+### 1. Iniciar LocalStack
+
+Abre una terminal en la raíz del proyecto y ejecuta:
+
+```sh
+docker start localstack_main
+```
+
+Verifica que el contenedor esté corriendo:
+```sh
+docker ps
+```
+
+### 2. Desplegar infraestructura simulada con Terraform
+```sh
+cd tf
+terraform init
+terraform apply -auto-approve
+```
+
+Esto simula la creación de una instancia EC2 tipo t2.micro y un Security Group con los puertos 22, 8080 y 3000 abiertos.
+
+### 3. Preparar dependencias y base de datos
+Desde la raíz del proyecto, ejecuta:
+```sh
+[setup.cmd](http://_vscodecontentref_/0)
+```
+
+Esto instalará las dependencias de frontend y backend, levantará la base de datos PostgreSQL con Docker Compose y ejecutará las migraciones y el seed de Prisma.
+
+### 4. Arrancar los servicios
+```sh
+[start-backend.cmd](http://_vscodecontentref_/1)
+```
+
+y 
+
+```sh
+[start-frontend.cmd](http://_vscodecontentref_/2)
+```
+
+Esto iniciará el backend (por defecto en puerto 3010) y el frontend (puerto 3000).
+
+### 5. Acceso a las aplicaciones
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3010
+
+### 6. Verificación de recursos simulados
+```sh
+aws --endpoint-url=http://localhost:4566 ec2 describe-instances
+aws --endpoint-url=http://localhost:4566 ec2 describe-security-groups
+```
