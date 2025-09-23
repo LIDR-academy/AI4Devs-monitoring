@@ -33,30 +33,34 @@ Este documento describe la implementación completa de un canal de monitorizaci�
 ## 📸 **Capturas de Pantalla**
 
 ### **Dashboard Principal**
-```
-[PLACEHOLDER: Captura del dashboard "LTI Application - Infrastructure & Performance"]
-URL: https://app.datadoghq.eu/dashboard/md4-4ty-jxk
-```
+<!-- Para visualización local: ../docs/screenshots/Captura de pantalla 2025-09-23 a las 18.00.12.png -->
+![Dashboard Principal](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2018.00.12.png)
+*Dashboard "LTI Application - Infrastructure & Performance" con métricas en tiempo real*
+*URL: https://app.datadoghq.eu/dashboard/md4-4ty-jxk*
 
 ### **Métricas de Sistema**
-```
-[PLACEHOLDER: Captura de métricas de CPU, memoria y disco por host]
-```
+![Métricas de Sistema](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.56.14.png)
+*Métricas de CPU, memoria y disco por host en la infraestructura*
 
 ### **Alertas Configuradas**
-```
-[PLACEHOLDER: Captura de los monitores configurados en Datadog]
-```
+![Alertas Configuradas](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.55.02.png)
+*Monitores configurados en Datadog para alertas críticas*
 
 ### **Logs Procesados**
-```
-[PLACEHOLDER: Captura de logs de aplicación en tiempo real]
-```
+![Logs Procesados](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.54.34.png)
+*Logs de aplicación en tiempo real con procesamiento activo*
 
 ### **Hosts Monitoreados**
-```
-[PLACEHOLDER: Captura de la lista de hosts (backend y frontend) en Datadog]
-```
+![Hosts Monitoreados](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.53.14.png)
+*Lista de hosts (backend y frontend) monitoreados en Datadog*
+
+### **Integración AWS**
+![Integración AWS](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.56.01.png)
+*Estado de la integración AWS-Datadog y métricas recopiladas*
+
+### **Configuración de Monitores**
+![Configuración de Monitores](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.57.31.png)
+*Configuración detallada de monitores y alertas*
 
 ---
 
@@ -241,8 +245,8 @@ Después de la implementación completa:
 
 ## 📚 **Documentación Adicional**
 
-- **Estado de Implementación**: `docs/datadog-implementation-status.md`
-- **Runbook de Operaciones**: `docs/runbook-operations.md`
+- **Capturas de Pantalla**: `../docs/screenshots/` - Evidencia visual de la implementación
 - **Plan de Implementación**: `prompts/datadog-aws-implementation-plan-AMP.md`
 - **Historial de Prompts**: `prompts/datadog-aws-prompts-AMP.md`
-- **Reporte de Validación**: `validation-report.txt`
+- **Configuración de Variables**: `tf/terraform.tfvars.example`
+- **Template de Variables de Entorno**: `env.template`
