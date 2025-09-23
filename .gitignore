@@ -1,35 +1,102 @@
-# Ignore in all directories
-**/.DS_Store
+# ==============================================
+# GITIGNORE - AI4Devs Monitoring Project
+# ==============================================
+
+# ===== ARCHIVOS SENSIBLES =====
 **/.env
-**/.env.example
-**/node_modules
-**/prompts_master.md
+**/.env.local
+**/.env.production
+**/.env.staging
+**/terraform.tfvars
 
+# ===== TERRAFORM =====
 **/.terraform/
-**/.terraform.lock.hcl  
+**/.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+*.backup
+.terraformrc
+terraform.rc
 
-# other dependencies
+# ===== NODE.JS / NPM =====
+**/node_modules/
 **/.pnp
 **.pnp.js
-
-# testing
-**/coverage
-
-# production
-**/build
-**/dist
-
-# logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package-lock.json
+yarn.lock
 
-# IDE
-.idea
-.vscode
+# ===== BUILD / DIST =====
+**/build/
+**/dist/
+**/coverage/
+**/.next/
+**/out/
 
-# .env
+# ===== LOGS =====
+**/*.log
+**/logs/
+**/.logs/
+
+# ===== TEMPORALES Y COMPRIMIDOS =====
 *.zip
-*.backup
-terraform.tfstate
-terraform.tfstate.*
+*.tar.gz
+*.rar
+*.7z
+**/tmp/
+**/temp/
+
+# ===== IDE / EDITORES =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ===== DATADOG / MONITORING =====
+**/datadog-agent.log
+**/dd-agent.log
+validation-report.txt
+**/health-check.log
+
+# ===== DOCKER =====
+**/docker-compose.override.yml
+**/.dockerignore
+
+# ===== TESTING =====
+**/cypress/videos/
+**/cypress/screenshots/
+**/test-results/
+
+# ===== DOCUMENTACIÓN TEMPORAL =====
+**/prompts_master.md
+**/temp-docs/
+**/draft-*
+
+# ===== BACKUP Y VERSIONES =====
+**/*.bak
+**/*.backup
+**/*.old
+**/backup/
+**/.backup/
+
+# ===== ARCHIVOS ESPECÍFICOS DEL PROYECTO =====
+# Scripts de instalación manual (ya no necesarios)
+**/install-datadog-manual.sh
+**/install-datadog-simple.sh
+**/install-datadog-ssm.sh
+**/load-env.sh
+**/terraform-with-env.sh
+
+# Archivos de prueba y desarrollo
+**/test-files/
+**/dev-scripts/
+**/experimental/
+
+# Archivos de configuración local
+**/local-config/
+**/.local/

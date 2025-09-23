@@ -1,10 +1,13 @@
 terraform {
+  required_version = ">= 1.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
+      version = "~> 5.0"
     }
     datadog = {
-      source = "DataDog/datadog"
+      source  = "DataDog/datadog"
+      version = "~> 3.0"
     }
   }
 }
@@ -16,7 +19,7 @@ provider "aws" {
 provider "datadog" {
   api_key = var.datadog_api_key
   app_key = var.datadog_app_key
-  api_url = "https://api.datadoghq.eu/"
+  api_url = "https://api.${var.datadog_site}/"
 }
 
 data "aws_iam_policy_document" "datadog_aws_integration_assume_role" {
@@ -287,30 +290,45 @@ resource "aws_iam_role_policy_attachment" "datadog_aws_integration_security_audi
 
 resource "datadog_integration_aws_account" "datadog_integration" {
   account_tags   = []
-  aws_account_id = var.aws_account_id != null ? var.aws_account_id : "000000000000"
+  aws_account_id = var.aws_account_id != null ? var.aws_account_id : "123456789012"
   aws_partition  = "aws"
+  
   aws_regions {
     include_all = true
   }
+  
   auth_config {
     aws_auth_config_role {
       role_name = "DatadogIntegrationRole"
     }
   }
+  
+  # Resources configuration - optimized for Free Tier
   resources_config {
-    cloud_security_posture_management_collection = true
-    extended_collection                          = true
+    cloud_security_posture_management_collection = var.free_tier_optimized ? false : true
+    extended_collection                          = var.free_tier_optimized ? false : true
   }
+  
+  # Traces configuration - minimal for Free Tier
   traces_config {
     xray_services {
+      # Only include essential services for Free Tier
+      include_only = var.free_tier_optimized ? [] : ["ec2"]
     }
   }
+  
+  # Logs configuration - minimal for Free Tier
   logs_config {
     lambda_forwarder {
+      # Minimal configuration for Free Tier
     }
   }
+  
+  # Metrics configuration optimized for Free Tier
   metrics_config {
     namespace_filters {
+      # For Free Tier, exclude expensive namespaces
+      exclude_only = var.free_tier_optimized ? ["AWS/SQS", "AWS/ElasticMapReduce", "AWS/Usage", "AWS/Lambda", "AWS/ECS", "AWS/ELB", "AWS/RDS", "AWS/S3"] : []
     }
   }
 }

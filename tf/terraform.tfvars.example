@@ -1,0 +1,34 @@
+# ==============================================
+# TERRAFORM VARIABLES TEMPLATE
+# ==============================================
+# Copy this file to terraform.tfvars and fill in your values
+# Never commit terraform.tfvars to version control!
+
+# ===== DATADOG CONFIGURATION =====
+# Choose your Datadog site
+datadog_site = "datadoghq.eu"  # Options: datadoghq.com, datadoghq.eu, us3.datadoghq.com, us5.datadoghq.com, ddog-gov.com
+
+# ===== AWS CONFIGURATION =====
+# Your AWS region
+aws_region = "us-east-1"  # Change to your preferred region
+
+# ===== PROJECT CONFIGURATION =====
+# Environment name (dev, staging, prod)
+environment = "dev"
+
+# Project name for resource tagging
+project_name = "your-project-name"
+
+# ===== FREE TIER OPTIMIZATION =====
+# Enable optimizations for AWS Free Tier and Datadog Free Plan
+free_tier_optimized = true
+
+# ===== SENSITIVE VARIABLES =====
+# These MUST be set via environment variables for security:
+# 
+# export TF_VAR_datadog_api_key="your_32_character_datadog_api_key"
+# export TF_VAR_datadog_app_key="your_40_character_datadog_app_key" 
+# export TF_VAR_aws_account_id="your_12_digit_aws_account_id"
+#
+# Or create a .env file with these variables and source it:
+# source .env
