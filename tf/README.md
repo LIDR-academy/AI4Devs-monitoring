@@ -175,52 +175,6 @@ Revisa el Checklist de Implementación en @datadog-aws-implementation-plan-AMP.m
 
 ---
 
-## 🔧 **Instrucciones de Instalación**
-
-### **Método 1: Scripts Automatizados**
-
-#### **Para Backend:**
-```bash
-# Conectarse a la instancia
-ssh -i tu-clave.pem ec2-user@54.242.188.99
-
-# Ejecutar script de instalación
-curl -s https://raw.githubusercontent.com/DataDog/datadog-agent/main/cmd/agent/install_script.sh | DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=YOUR_DATADOG_API_KEY DD_SITE=datadoghq.eu bash
-```
-
-#### **Para Frontend:**
-```bash
-# Conectarse a la instancia
-ssh -i tu-clave.pem ec2-user@54.161.33.52
-
-# Ejecutar script de instalación
-curl -s https://raw.githubusercontent.com/DataDog/datadog-agent/main/cmd/agent/install_script.sh | DD_AGENT_MAJOR_VERSION=7 DD_API_KEY=YOUR_DATADOG_API_KEY DD_SITE=datadoghq.eu bash
-```
-
-### **Método 2: Scripts Personalizados**
-
-Los scripts completos están disponibles en:
-- `tf/scripts/backend-install-datadog.sh`
-- `tf/scripts/frontend-install-datadog.sh`
-
----
-
-## ✅ **Verificaciones Post-Instalación**
-
-```bash
-# Verificar estado del Datadog Agent
-sudo systemctl status datadog-agent
-
-# Ver logs del agente
-sudo tail -f /var/log/datadog-agent/agent.log
-
-# Ejecutar health check
-sudo /usr/local/bin/backend-health-check.sh  # Para backend
-sudo /usr/local/bin/frontend-health-check.sh # Para frontend
-```
-
----
-
 ## 🎯 **Resultados Esperados**
 
 Después de la implementación completa:
@@ -231,15 +185,6 @@ Después de la implementación completa:
 ✅ **Logs procesados** y indexados  
 ✅ **Documentación completa** para operaciones  
 ✅ **Scripts de validación** automatizados  
-
----
-
-## 📊 **Accesos Directos**
-
-- **Dashboard Datadog**: https://app.datadoghq.eu/dashboard/md4-4ty-jxk
-- **Backend EC2**: 54.242.188.99
-- **Frontend EC2**: 54.161.33.52
-- **S3 Bucket**: ai4devs-project-code-bucket-7dd154b1
 
 ---
 
