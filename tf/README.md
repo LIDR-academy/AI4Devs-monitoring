@@ -32,35 +32,35 @@ Este documento describe la implementación completa de un canal de monitorizaci�
 
 ## 📸 **Capturas de Pantalla**
 
-### **Dashboard Principal**
-<!-- Para visualización local: ../docs/screenshots/Captura de pantalla 2025-09-23 a las 18.00.12.png -->
-![Dashboard Principal](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2018.00.12.png)
+### **1. Dashboard Principal - LTI Application**
+<!-- Para visualización local: ../docs/screenshots/dashboard principal.png -->
+![Dashboard Principal](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/dashboard%20principal.png)
 *Dashboard "LTI Application - Infrastructure & Performance" con métricas en tiempo real*
 *URL: https://app.datadoghq.eu/dashboard/md4-4ty-jxk*
 
-### **Métricas de Sistema**
-![Métricas de Sistema](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.56.14.png)
-*Métricas de CPU, memoria y disco por host en la infraestructura*
+### **2. Lista de Monitores Configurados**
+![Lista de Monitores](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/monitor%20list.png)
+*Configuración detallada de monitores y alertas en Datadog*
 
-### **Alertas Configuradas**
-![Alertas Configuradas](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.55.02.png)
-*Monitores configurados en Datadog para alertas críticas*
-
-### **Logs Procesados**
-![Logs Procesados](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.54.34.png)
-*Logs de aplicación en tiempo real con procesamiento activo*
-
-### **Hosts Monitoreados**
-![Hosts Monitoreados](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.53.14.png)
-*Lista de hosts (backend y frontend) monitoreados en Datadog*
-
-### **Integración AWS**
-![Integración AWS](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.56.01.png)
+### **3. Integración AWS-Datadog**
+![Integración AWS](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/integracion%20aws.png)
 *Estado de la integración AWS-Datadog y métricas recopiladas*
 
-### **Configuración de Monitores**
-![Configuración de Monitores](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/Captura%20de%20pantalla%202025-09-23%20a%20las%2017.57.31.png)
-*Configuración detallada de monitores y alertas*
+### **4. Host Map - Vista de Infraestructura**
+![Host Map](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/host%20map.png)
+*Vista de infraestructura con métricas de CPU, memoria y disco por host*
+
+### **5. Lista de Hosts Monitoreados**
+![Lista de Hosts](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/host%20list.png)
+*Lista de hosts (backend y frontend) monitoreados en Datadog*
+
+### **6. Instancia EC2 - Backend**
+![Instancia EC2 Backend](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/instancia%20EC2-1.png)
+*Detalles de la instancia EC2 del backend con métricas específicas*
+
+### **7. Instancia EC2 - Frontend**
+![Instancia EC2 Frontend](https://raw.githubusercontent.com/aandmaldonado/AI4Devs-monitoring/feature-alvaro-maldonado/docs/screenshots/instancia%20EC2-2.png)
+*Detalles de la instancia EC2 del frontend con métricas específicas*
 
 ---
 
