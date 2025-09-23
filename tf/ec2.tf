@@ -4,6 +4,7 @@ resource "aws_instance" "backend" {
   iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
   user_data              = templatefile("scripts/backend_user_data.sh", { timestamp = timestamp() })
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
+  subnet_id              = aws_subnet.public.id
   tags = {
     Name = "lti-project-backend"
   }
@@ -15,6 +16,7 @@ resource "aws_instance" "frontend" {
   iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
   user_data              = templatefile("scripts/frontend_user_data.sh", { timestamp = timestamp() })
   vpc_security_group_ids = [aws_security_group.frontend_sg.id]
+  subnet_id              = aws_subnet.public.id
   tags = {
     Name = "lti-project-frontend"
   }

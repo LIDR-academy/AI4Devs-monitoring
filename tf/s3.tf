@@ -1,7 +1,12 @@
 resource "aws_s3_bucket" "code_bucket" {
-  bucket = "ai4devs-project-code-bucket"
-  acl    = "private"
+  bucket = "ai4devs-project-code-bucket-${random_id.bucket_suffix.hex}"
 }
+
+# ACL is not needed - bucket is private by default
+# resource "aws_s3_bucket_acl" "code_bucket_acl" {
+#   bucket = aws_s3_bucket.code_bucket.id
+#   acl    = "private"
+# }
 
 resource "null_resource" "generate_zip" {
   provisioner "local-exec" {
@@ -14,14 +19,14 @@ resource "null_resource" "generate_zip" {
   }
 }
 
-resource "aws_s3_bucket_object" "backend_zip" {
+resource "aws_s3_object" "backend_zip" {
   bucket = aws_s3_bucket.code_bucket.bucket
   key    = "backend.zip"
   source = "${path.module}/../backend.zip"
   depends_on = [null_resource.generate_zip]
 }
 
-resource "aws_s3_bucket_object" "frontend_zip" {
+resource "aws_s3_object" "frontend_zip" {
   bucket = aws_s3_bucket.code_bucket.bucket
   key    = "frontend.zip"
   source = "${path.module}/../frontend.zip"
