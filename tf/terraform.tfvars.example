@@ -1,0 +1,24 @@
+# Example Terraform Variables File
+# Copy this to terraform.tfvars and fill in your actual values
+
+# AWS Configuration
+aws_region     = "us-east-1"
+instance_type  = "t2.micro"
+key_name       = "my-key-pair"
+
+# Datadog Configuration
+# Get these from your Datadog account:
+# - API Key: https://app.datadoghq.com/organization-settings/api-keys
+# - App Key: https://app.datadoghq.com/organization-settings/application-keys
+datadog_api_key     = "your_datadog_api_key_here"
+datadog_app_key     = "your_datadog_app_key_here"
+datadog_api_url     = "https://api.datadoghq.com/"
+datadog_site        = "datadoghq.com"
+datadog_external_id = "datadog-external-id-unique-123"
+
+# Optional: Datadog Forwarder Lambda ARN for log collection
+# If you have deployed the Datadog Forwarder Lambda, add its ARN here
+# datadog_forwarder_lambda_arn = "arn:aws:lambda:us-east-1:123456789012:function:datadog-forwarder"
+
+# Datadog Features
+enable_datadog_logs = true

@@ -1,12 +1,25 @@
 # Ignore in all directories
 **/.DS_Store
-#**/.env
-**/.env.example
 **/node_modules
 **/prompts_master.md
 
+# Terraform
 **/.terraform/
-**/.terraform.lock.hcl  
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/terraform.tfstate.*.backup
+
+# Terraform credentials (SECURITY: Never commit real credentials)
+**/terraform.tfvars
+
+# Environment files (but NOT terraform.tfvars which contains necessary config)
+**/.env
+**/.env.local
+**/.env.development
+**/.env.test
+**/.env.production
+**/.env.example  
 
 # other dependencies
 **/.pnp

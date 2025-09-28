@@ -1,11 +1,18 @@
+# Generar sufijo aleatorio para el bucket
+resource "random_string" "bucket_suffix" {
+  length  = 8
+  special = false
+  upper   = false
+}
+
 resource "aws_s3_bucket" "code_bucket" {
-  bucket = "ai4devs-project-code-bucket"
+  bucket = "ai4devs-monitoring-code-bucket-${random_string.bucket_suffix.result}"
   acl    = "private"
 }
 
 resource "null_resource" "generate_zip" {
   provisioner "local-exec" {
-    command = "cd .. && sh ./generar-zip.sh"
+    command = "echo 'Zip files should exist already'"
     working_dir = "${path.module}"
   }
 
