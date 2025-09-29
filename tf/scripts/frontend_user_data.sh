@@ -1,20 +1,25 @@
 #!/bin/bash
-sudo yum update -y
-sudo yum install -y docker
+exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+set -xe
 
-# Iniciar el servicio de Docker
-sudo service docker start
+# Instalar dependencias
+yum update -y
+yum install -y docker curl unzip awscli amazon-ssm-agent
 
-# Descargar y descomprimir el archivo frontend.zip desde S3
-aws s3 cp s3://ai4devs-project-code-bucket/frontend.zip /home/ec2-user/frontend.zip
-unzip /home/ec2-user/frontend.zip -d /home/ec2-user/
+# Iniciar servicios
+systemctl enable docker
+systemctl start docker
+systemctl enable amazon-ssm-agent
+systemctl restart amazon-ssm-agent
 
-# Construir la imagen Docker para el frontend
-cd /home/ec2-user/frontend
-sudo docker build -t lti-frontend .
+# Descargar artefacto frontend desde S3
+aws s3 cp ${ARTIFACT_S3} /home/ec2-user/frontend.zip
+unzip -o /home/ec2-user/frontend.zip -d /home/ec2-user/
 
-# Ejecutar el contenedor Docker
-sudo docker run -d -p 3000:3000 lti-frontend
+# Construir y ejecutar contenedor con Nginx
+cd /home/ec2-user
+docker build -t lti-frontend .
+docker rm -f lti-frontend || true
+docker run -d -p 80:80 --name lti-frontend lti-frontend
 
-# Timestamp to force update
-echo "Timestamp: ${timestamp}"
+echo "Frontend desplegado con build local y Nginx"
