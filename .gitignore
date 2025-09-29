@@ -1,31 +1,28 @@
-# Ignore in all directories
-**/.DS_Store
-#**/.env
-**/.env.example
-**/node_modules
-**/prompts_master.md
+# Terraform
+*.tfstate
+*.tfstate.*
+*.backup
+.terraform/
+.terraform.lock.hcl
 
-**/.terraform/
-**/.terraform.lock.hcl  
+# Node / React
+node_modules/
+build/
+dist/
+coverage/
 
-# other dependencies
-**/.pnp
-**.pnp.js
-
-# testing
-**/coverage
-
-# production
-**/build
-**/dist
-
-# logs
+# Logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# IDE
-.idea
-.vscode
+# Artefactos
+*.zip
 
-# .env
+# IDE
+.idea/
+.vscode/
+
+# Otros
+.DS_Store

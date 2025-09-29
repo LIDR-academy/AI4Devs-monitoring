@@ -1,20 +1,19 @@
-# Usar una imagen base de Node.js
-FROM node:22.14.0-alpine3.21
+# Etapa 1: construir la app
+FROM node:22.14.0-alpine3.21 AS build
 
-# Establecer el directorio de trabajo
 WORKDIR /usr/src/app
 
-# Copiar los archivos de package.json y package-lock.json
 COPY package*.json ./
-
-# Instalar las dependencias
 RUN npm install
 
-# Copiar el resto del código de la aplicación
 COPY . .
+RUN npm run build
 
-# Exponer el puerto 3000
-EXPOSE 3000
+# Etapa 2: servir la app con un servidor web ligero
+FROM nginx:alpine
 
-# Comando para ejecutar la aplicación
-CMD ["npm", "start"]
+# Copiar la build de React a la carpeta de nginx
+COPY --from=build /usr/src/app/build /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
