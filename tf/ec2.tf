@@ -2,7 +2,11 @@ resource "aws_instance" "backend" {
   ami                    = "ami-074211ec8e88502be"
   instance_type          = "t3.micro"
   iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
-  user_data              = templatefile("scripts/backend_user_data.sh", { timestamp = timestamp() })
+  user_data = templatefile("scripts/backend_user_data.sh", {
+    timestamp        = timestamp()
+    datadog_api_key  = var.datadog_api_key
+    datadog_site     = var.datadog_site
+    })
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
   associate_public_ip_address = true   # 👈 aseguramos IP pública
   tags = {

@@ -23,13 +23,18 @@ unzip -o /home/ec2-user/backend.zip -d /home/ec2-user/
 
 # Construir y levantar backend en Docker
 cd /home/ec2-user/backend
+
+# Eliminar contenedor previo si existía
+docker rm -f lti-backend || true
+
+# Build y run en modo detached (-d)
 docker build -t lti-backend .
 docker run -d -p 8080:8080 --name lti-backend lti-backend
 
 # Instalar Datadog Agent
 DD_AGENT_MAJOR_VERSION=7
-DD_API_KEY=5e1c3ee139755eb6c3e168c52d679656
-DD_SITE="datadoghq.eu"
+DD_API_KEY=${datadog_api_key}
+DD_SITE=${datadog_site}
 
 curl -s https://install.datadoghq.com/scripts/install_script.sh \
   | DD_AGENT_MAJOR_VERSION=$DD_AGENT_MAJOR_VERSION \
