@@ -21,8 +21,8 @@ RUN npm run build
 
 RUN npm run prisma:generate
 
-# Exponer el puerto 8080
-EXPOSE 8080
+# Exponer el puerto 8081
+EXPOSE 8081
 
 # Comando para ejecutar la aplicación
 CMD ["npm", "run", "start:prod"]

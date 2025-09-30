@@ -8,7 +8,7 @@
     - te seran provistos los archivos frontend.zip y backend.zip en la raiz del proyecto
     - Un bucket S3 que aloja en su raiz un archivo zip para el backend y uno para el frontend, se llamarán frontend.zip y backend.zip
     - Las instancias EC2 deben leer los archivos desde S3 y tener permisos para hacerlo, podrias usar un IAM policy.
-    - el @backend debe ser accesible por medio del puerto 8080
+    - el @backend debe ser accesible por medio del puerto 8081
     - el @frontend debe ser accesible por medio del puerto 3000
     - No es necesario solicitar nombres de keys ya que ya se encuentran configuradas con aws configure
     - Utiliza terraform en la carpeta @tf
@@ -23,7 +23,7 @@
         
     - prompt 4
         
-        Genera un Dockerfile para backend que ejecute las migraciones de prisma haga build y ejecute el codigo exponiendo el puerto 8080 y usa node 18 como base
+        Genera un Dockerfile para backend que ejecute las migraciones de prisma haga build y ejecute el codigo exponiendo el puerto 8081 y usa node 18 como base
         
     - Prompt 5
         

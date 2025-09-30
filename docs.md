@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 RUN npm run prisma:generate
 
-EXPOSE 8080
+EXPOSE 8081
 CMD [ "npm", "start" ]
 
 
