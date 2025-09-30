@@ -33,7 +33,7 @@ Configuración de credenciales de AWS utilizando las variables de entorno AWS_AC
 
 ** Prompt 2**
 Puedes hacer los siguientes cambios basado en buenas practicas?
-  - Configura Nginx como proxy inverso para el backend en el puerto 8080.
+  - Configura Nginx como proxy inverso para el backend en el puerto 8081.
   - Ejecuta en segundo plano el backend ya que esta quedandose corriendo indefinidamente.
   - Los tests estan fallando, debes esperar a que la base de datos, frontend y backend estén listos para que Cypress pueda ejecutar los test.
 

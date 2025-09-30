@@ -186,7 +186,7 @@ resource "aws_instance" "backend" {
               sudo npm install -g pm2
               npm install
               npm run build
-              pm2 start npm --name "backend" -- start -- --port 8080
+              pm2 start npm --name "backend" -- start -- --port 8081
               EOF
 
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
@@ -204,8 +204,8 @@ resource "aws_security_group" "backend_sg" {
   }
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 8081
+    to_port     = 8081
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -677,7 +677,7 @@ variable "code_bucket" {
                         sudo npm install -g pm2
                         npm install
                         npm run build
-                        pm2 start npm --name "backend" -- start -- --port 8080
+                        pm2 start npm --name "backend" -- start -- --port 8081
                         EOF
           
             vpc_security_group_ids = [aws_security_group.backend_sg.id]
@@ -695,8 +695,8 @@ variable "code_bucket" {
             }
           
             ingress {
-              from_port   = 8080
-              to_port     = 8080
+              from_port   = 8081
+              to_port     = 8081
               protocol    = "tcp"
               cidr_blocks = ["0.0.0.0/0"]
             }

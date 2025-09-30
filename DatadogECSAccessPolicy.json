@@ -1,0 +1,12 @@
+{
+    "Effect": "Allow",
+    "Action": [
+      "cloudwatch:GetMetricData",
+      "cloudwatch:ListMetrics",
+      "logs:DescribeLogGroups",
+      "logs:DescribeLogStreams",
+      "logs:GetLogEvents"
+    ],
+    "Resource": "*"
+  }
+  
