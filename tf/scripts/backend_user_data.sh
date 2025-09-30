@@ -18,3 +18,19 @@ sudo docker run -d -p 8080:8080 lti-backend
 
 # Timestamp to force update
 echo "Timestamp: ${timestamp}"
+
+#!/bin/bash
+# ... existing code ...
+
+# Instalar el agente de Datadog
+DD_API_KEY=${datadog_api_key} DD_SITE="us5.datadoghq.com" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)"
+
+# Configurar tags para el agente
+echo "tags:" >> /etc/datadog-agent/datadog.yaml
+echo "  - service:backend" >> /etc/datadog-agent/datadog.yaml
+echo "  - env:production" >> /etc/datadog-agent/datadog.yaml
+
+# Reiniciar el agente
+sudo service datadog-agent restart
+
+# ... rest of existing code ...
