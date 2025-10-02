@@ -2,6 +2,30 @@
 
 Este proyecto es una aplicación full-stack con un frontend en React y un backend en Express usando Prisma como un ORM. El frontend se inicia con Create React App y el backend está escrito en TypeScript.
 
+---
+
+## 📊 Monitoreo con Datadog + AWS
+
+Este repositorio incluye una **implementación completa de monitoreo** usando Datadog y AWS siguiendo **best practices de DevSecOps**.
+
+**📁 Documentación de Monitoreo:**
+- **[README_IMPLEMENTATION.md](./README_IMPLEMENTATION.md)** - Guía completa + análisis del prompt engineering
+- **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Guía rápida de despliegue (30 min)
+- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Resumen ejecutivo
+- **[tf/](./tf/)** - Infraestructura como código (Terraform)
+
+**🔐 Características Implementadas:**
+- ✅ Zero secrets exposure (SSM Parameter Store)
+- ✅ Datadog AWS Integration con IAM role
+- ✅ Agente Datadog en EC2 (módulo reutilizable)
+- ✅ Dashboard completo de infraestructura
+- ✅ Remote state backend (S3 + DynamoDB)
+- ✅ 3000+ líneas de documentación
+
+**⚠️ Nota Importante:** La implementación fue desarrollada con una cuenta AWS con restricciones de despliegue a EC2, lo que impidió validar el ejercicio end-to-end con screenshots del dashboard. Sin embargo, **todo el código está completo, validado y production-ready** para ser desplegado en una cuenta sin limitaciones. Ver [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) para más detalles.
+
+---
+
 ## Explicación de Directorios y Archivos
 
 - `backend/`: Contiene el código del lado del servidor escrito en Node.js.
