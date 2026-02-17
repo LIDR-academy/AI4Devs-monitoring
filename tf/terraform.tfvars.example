@@ -1,0 +1,41 @@
+# ==========================================
+# AWS Configuration
+# ==========================================
+aws_region    = "us-east-1"
+ami_id        = "ami-075d39ebbca89ed55"
+instance_type = "t2.micro"
+# key_name    = "your-ssh-key-pair-name"
+
+# ==========================================
+# Application Configuration
+# ==========================================
+environment  = "production"
+project_name = "lti-recruiter"
+app_version  = "1.0.0"
+
+# ==========================================
+# Database Configuration
+# ==========================================
+db_user     = "LTIdbUser"
+db_password = "CHANGE_ME_TO_A_SECURE_PASSWORD"
+db_name     = "LTIdb"
+
+# ==========================================
+# Datadog Configuration
+# ==========================================
+datadog_api_key = "YOUR_DATADOG_API_KEY"
+datadog_app_key = "YOUR_DATADOG_APP_KEY"
+datadog_site    = "datadoghq.com"
+datadog_api_url = "https://api.datadoghq.com/"
+
+# ==========================================
+# Notifications
+# ==========================================
+notification_slack_channel = "@slack-devops-alerts"
+notification_email         = "devops@example.com"
+
+# ==========================================
+# S3 & ECR
+# ==========================================
+s3_bucket_name        = "ai4devs-project-code-bucket"
+ecr_repository_prefix = "lti-recruiter"

@@ -1,28 +1,66 @@
-# Usar una imagen base de Node.js
-FROM node:23.8.0-alpine3.21
+# ============================================
+# Stage 1: Build
+# ============================================
+FROM node:18-alpine AS builder
 
-# Establecer el directorio de trabajo
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Instalar OpenSSL y otras dependencias necesarias para Prisma
+# Install OpenSSL and dependencies needed for Prisma
 RUN apk add --no-cache openssl openssl-dev libc6-compat
 
-# Copiar los archivos de package.json y package-lock.json
+# Copy dependency files first for better layer caching
 COPY package*.json ./
 
-# Instalar las dependencias
-RUN npm install
+# Install all dependencies (including devDependencies for build)
+RUN npm ci
 
-# Copiar el resto del código de la aplicación
+# Copy prisma schema and generate client
+COPY prisma ./prisma/
+RUN npx prisma generate
+
+# Copy the rest of the source code
 COPY . .
 
-# Construir la aplicación
+# Build TypeScript
 RUN npm run build
 
-RUN npm run prisma:generate
+# ============================================
+# Stage 2: Production
+# ============================================
+FROM node:18-alpine AS production
 
-# Exponer el puerto 8080
+WORKDIR /app
+
+# Install OpenSSL and dependencies needed for Prisma at runtime
+RUN apk add --no-cache openssl openssl-dev libc6-compat curl
+
+# Copy dependency files
+COPY package*.json ./
+
+# Install production dependencies only
+RUN npm ci --only=production
+
+# Copy prisma schema and generated client from builder
+COPY --from=builder /app/prisma ./prisma/
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+# Copy built application from builder
+COPY --from=builder /app/dist ./dist
+
+# Create a non-root user
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -S appuser -u 1001 -G appgroup && \
+    chown -R appuser:appgroup /app
+
+USER appuser
+
+# Expose port 8080
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-CMD ["npm", "run", "start:prod"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:8080/ || exit 1
+
+# Run migrations and start the application
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
