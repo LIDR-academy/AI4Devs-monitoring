@@ -1,0 +1,350 @@
+name: CI/CD - LTI Recruiter
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY_BACKEND: lti-recruiter/backend
+  ECR_REPOSITORY_FRONTEND: lti-recruiter/frontend
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  # ==========================================
+  # Backend Tests
+  # ==========================================
+  test-backend:
+    name: Backend - Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: LTIdbUser
+          POSTGRES_PASSWORD: testpassword
+          POSTGRES_DB: LTIdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://LTIdbUser:testpassword@localhost:5432/LTIdb
+
+      - name: Run tests
+        run: npm test
+        env:
+          DATABASE_URL: postgresql://LTIdbUser:testpassword@localhost:5432/LTIdb
+          NODE_ENV: test
+
+      - name: Build check
+        run: npm run build
+
+  # ==========================================
+  # Frontend Tests
+  # ==========================================
+  test-frontend:
+    name: Frontend - Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build check
+        run: npm run build
+
+  # ==========================================
+  # Build & Push Docker Images
+  # ==========================================
+  build-and-push:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    outputs:
+      backend_image: ${{ steps.build-backend.outputs.image }}
+      frontend_image: ${{ steps.build-frontend.outputs.image }}
+      image_tag: ${{ steps.meta.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set image tag
+        id: meta
+        run: |
+          VERSION=$(cat VERSION | tr -d '[:space:]')
+          SHA_SHORT=$(echo ${{ github.sha }} | cut -c1-7)
+          echo "version=${VERSION}-${SHA_SHORT}" >> "$GITHUB_OUTPUT"
+          echo "version_only=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build & push backend image
+        id: build-backend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.meta.outputs.version }}
+        run: |
+          docker build \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest \
+            -f backend/Dockerfile \
+            backend/
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_BACKEND:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Build & push frontend image
+        id: build-frontend
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.meta.outputs.version }}
+        run: |
+          docker build \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest \
+            -f frontend/Dockerfile \
+            frontend/
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:latest
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_FRONTEND:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+  # ==========================================
+  # Deploy to EC2
+  # ==========================================
+  deploy:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: [build-and-push]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Deploy backend to EC2
+        env:
+          BACKEND_IMAGE: ${{ needs.build-and-push.outputs.backend_image }}
+          BACKEND_HOST: ${{ secrets.BACKEND_EC2_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$BACKEND_HOST << 'DEPLOY_SCRIPT'
+            set -e
+
+            # Login to ECR
+            aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+
+            # Pull new image
+            docker pull ${{ env.BACKEND_IMAGE }}
+
+            # Stop and remove old container
+            docker stop lti-backend || true
+            docker rm lti-backend || true
+
+            # Run new container
+            docker run -d \
+              --name lti-backend \
+              --restart unless-stopped \
+              -p 8080:8080 \
+              -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+              -e NODE_ENV=production \
+              -e DD_AGENT_HOST=localhost \
+              -e DD_TRACE_AGENT_PORT=8126 \
+              -e DD_SERVICE=lti-backend \
+              -e DD_ENV=production \
+              -e DD_LOGS_INJECTION=true \
+              ${{ env.BACKEND_IMAGE }}
+
+            # Cleanup old images
+            docker image prune -af
+          DEPLOY_SCRIPT
+
+          rm -f private_key.pem
+
+      - name: Deploy frontend to EC2
+        env:
+          FRONTEND_IMAGE: ${{ needs.build-and-push.outputs.frontend_image }}
+          FRONTEND_HOST: ${{ secrets.FRONTEND_EC2_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@$FRONTEND_HOST << 'DEPLOY_SCRIPT'
+            set -e
+
+            # Login to ECR
+            aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
+
+            # Pull new image
+            docker pull ${{ env.FRONTEND_IMAGE }}
+
+            # Stop and remove old container
+            docker stop lti-frontend || true
+            docker rm lti-frontend || true
+
+            # Run new container
+            docker run -d \
+              --name lti-frontend \
+              --restart unless-stopped \
+              -p 3000:3000 \
+              -e NODE_ENV=production \
+              -e DD_SERVICE=lti-frontend \
+              -e DD_ENV=production \
+              ${{ env.FRONTEND_IMAGE }}
+
+            # Cleanup old images
+            docker image prune -af
+          DEPLOY_SCRIPT
+
+          rm -f private_key.pem
+
+      - name: Verify deployment - Backend
+        run: |
+          echo "Waiting for backend to start..."
+          sleep 30
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.BACKEND_EC2_HOST }}:8080/ || echo "000")
+          if [ "$STATUS" = "200" ]; then
+            echo "Backend deployment successful (HTTP $STATUS)"
+          else
+            echo "WARNING: Backend health check returned HTTP $STATUS"
+          fi
+
+      - name: Verify deployment - Frontend
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.FRONTEND_EC2_HOST }}:3000/ || echo "000")
+          if [ "$STATUS" = "200" ]; then
+            echo "Frontend deployment successful (HTTP $STATUS)"
+          else
+            echo "WARNING: Frontend health check returned HTTP $STATUS"
+          fi
+
+  # ==========================================
+  # Notifications
+  # ==========================================
+  notify-success:
+    name: Notify - Success
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: success()
+
+    steps:
+      - name: Notify Slack - Success
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": ":white_check_mark: *LTI Recruiter Deployment Successful*\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ github.sha }}`\n*Author:* ${{ github.actor }}\n*Run:* ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+  notify-failure:
+    name: Notify - Failure
+    runs-on: ubuntu-latest
+    needs: [test-backend, test-frontend, build-and-push, deploy]
+    if: failure()
+
+    steps:
+      - name: Notify Slack - Failure
+        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          payload: |
+            {
+              "text": ":x: *LTI Recruiter Deployment FAILED*\n*Branch:* `${{ github.ref_name }}`\n*Commit:* `${{ github.sha }}`\n*Author:* ${{ github.actor }}\n*Run:* ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+
+      - name: Send email notification
+        if: ${{ secrets.NOTIFICATION_EMAIL != '' }}
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "[FAILED] LTI Recruiter Deployment - ${{ github.ref_name }}"
+          body: |
+            Deployment failed for LTI Recruiter.
+
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
+            Author: ${{ github.actor }}
+            Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          to: ${{ secrets.NOTIFICATION_EMAIL }}
+          from: CI/CD Pipeline <noreply@lti-recruiter.com>

@@ -29,3 +29,17 @@ yarn-error.log*
 .vscode
 
 # .env
+
+# Terraform
+tf/terraform.tfvars
+tf/*.tfstate
+tf/*.tfstate.backup
+tf/.terraform/
+tf/.terraform.lock.hcl
+
+# Build artifacts
+*.zip
+localstack-data/
+
+# Docker
+docker-compose.override.yml
