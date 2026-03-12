@@ -160,3 +160,30 @@ POST http://localhost:3010/candidates
 }
 ```
 
+## Entrega Final (Ejercicio Datadog - AWS con Terraform)
+
+### Explicación de los cambios realizados
+Para lograr la integración de observabilidad de infraestructura en AWS mediante Datadog, se realizaron las siguientes configuraciones mediante Terraform:
+- **`provider.tf`**: Se incluyó y configuró el provider oficial de `DataDog/datadog`, configurando las variables de autenticación `datadog_api_key` y `datadog_app_key`.
+- **`integration.tf`**: Se creó el recurso `datadog_integration_aws` y un **Rol de IAM** (`DatadogAWSIntegrationRole`) en AWS con permisos delegados para que la cuenta principal de Datadog asuma dicho rol (`sts:AssumeRole`) de forma segura utilizando un `ExternalId` autogenerado. Se asignó la política de lectura `SecurityAudit`.
+- **`dashboard.tf`**: Se desplegó un Dashboard en Datadog ("AWS Infrastructure Observability - EC2") configurado como código para proveer gráficas en tiempo real del tráfico de red (Bytes In/Out), uso de CPU segregado por host/tipo de instancia, y estado de conexión del agente EC2.
+- **`main.tf`**: Se incluyó un recurso de monitoreo (`datadog_monitor.ec2_cpu_monitor`) que activa alertas cuando el uso general de CPU pasa el 80% (Critical) o 70% (Warning), taggeando a `@team-devops`.
+- **Scripts de User Data (`tf/scripts/`)**: Se modificó `backend_user_data.sh` para **instalar el Agente de Datadog en EC2** inyectándole el `DD_API_KEY`, además de instrumentar APM activando el Trace Agent y configurando variables de entorno en el contenedor del backend para colectar trazas (`DD_APM_ENABLED=true`).
+- **Backend (`backend/src/index.ts`)**: Se incluyó la librería `dd-trace` y se inicializó el tracer en el código base (primera línea) para conectar métricas APM de la app NodeJS al host local del agente de Datadog.
+
+### Capturas de pantalla
+- **Dashboard en Datadog**:  
+  *[INSERTA TU CAPTURA DE PANTALLA DEL DASHBOARD AQUÍ]*
+
+- **Alerta "EC2 CPU Utilization" en Datadog**:  
+  *[INSERTA TU CAPTURA DE PANTALLA DE LA ALERTA AQUÍ]*
+
+### Documentación de Prompts
+Los prompts utilizados para generar la infraestructura de Terraform relacionada con la integración pueden encontrarse en el siguiente archivo:
+[prompts/datadog-aws-prompts.md](./prompts/datadog-aws-prompts.md)
+
+### Desafíos encontrados y su solución
+1. **Scope de Archivos Seed de Prisma ignorado por TypeScript**: Al abrir y editar archivos de inserción inicial (`prisma/seed.ts`), el IDE de TypeScript marcaba error en variables globales de Node.js (como `process.exit()`). 
+   - *Solución*: Se agregó la ruta `"prisma/**/*.ts"` a la sección `include` del `tsconfig.json` del backend, permitiendo que el compilador TypeScript tomara en cuenta los tipos de `@types/node` instalados y resolviera exitosamente el error.
+2. **Dependencias del APM sobre Docker**: Se requería monitoreo profundo de la aplicación, pero la app corre aislada en su propio contenedor dentro de un EC2 que corre el Agente Host. 
+   - *Solución*: Se enviaron variables de entorno (`DD_AGENT_HOST`, `DD_ENV`, `DD_SERVICE`, etc.) al comando `docker run` y se activó el flag de tráfico no local (`DD_APM_NON_LOCAL_TRAFFIC`) en la instalación del agente de Datadog, logrando establecer una comunicación bidireccional entre la App containerizada y el proceso del agente host.
