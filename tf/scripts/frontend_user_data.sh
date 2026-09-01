@@ -16,5 +16,10 @@ sudo docker build -t lti-frontend .
 # Ejecutar el contenedor Docker
 sudo docker run -d -p 3000:3000 lti-frontend
 
+# -----------------------------------
+# Instalación del Agente de Datadog
+# -----------------------------------
+DD_API_KEY="${datadog_api_key}" DD_SITE="datadoghq.com" bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script_agent7.sh)"
+
 # Timestamp to force update
 echo "Timestamp: ${timestamp}"

@@ -1,3 +1,5 @@
+import tracer from 'dd-trace';
+tracer.init(); // Inicializa el agente de APM de Datadog
 import { Request, Response, NextFunction } from 'express';
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
