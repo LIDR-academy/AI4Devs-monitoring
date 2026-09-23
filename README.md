@@ -87,6 +87,17 @@ npm start
 
 El servidor backend estará corriendo en http://localhost:3010 y el frontend estará disponible en http://localhost:3000.
 
+## Infraestructura y monitoreo (Terraform + Datadog)
+
+La infraestructura AWS (EC2, S3, security groups, IAM) y el monitoreo con Datadog se gestionan con Terraform en el directorio `tf/`. Incluye:
+
+- Integración AWS–Datadog (role IAM, integración en Datadog).
+- Instalación del agente Datadog en las instancias EC2 vía `user_data`.
+- Dashboard en Datadog con métricas de CPU, red y estado.
+- Monitor de alerta (CPU alta).
+
+Para requisitos, credenciales, ejecución (`terraform init`, `plan`, `apply`) y dónde ver el dashboard y las alertas, ver **[tf/README.md](tf/README.md)**. Los prompts utilizados para generar este código están en **[prompts/datadog-aws-prompts.md](prompts/datadog-aws-prompts.md)**.
+
 ## Docker y PostgreSQL
 
 Este proyecto usa Docker para ejecutar una base de datos PostgreSQL. Así es cómo ponerlo en marcha:

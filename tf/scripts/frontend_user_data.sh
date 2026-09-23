@@ -18,3 +18,15 @@ sudo docker run -d -p 3000:3000 lti-frontend
 
 # Timestamp to force update
 echo "Timestamp: ${timestamp}"
+
+# ------------------------------------------------------------------------------
+# Datadog Agent
+# ------------------------------------------------------------------------------
+if [ -n "${dd_api_key}" ]; then
+  export DD_API_KEY="${dd_api_key}"
+  export DD_SITE="${dd_site}"
+  export DD_TAGS="env:${environment},role:frontend"
+  DD_APM_INSTRUMENTATION_ENABLED=host bash -c "$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script_agent7.sh)"
+  systemctl start datadog-agent
+  systemctl enable datadog-agent
+fi
