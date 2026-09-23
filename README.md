@@ -1,162 +1,267 @@
-# LTI - Sistema de Seguimiento de Talento
+# AI4Devs Monitoring - Integración Datadog-AWS
 
-Este proyecto es una aplicación full-stack con un frontend en React y un backend en Express usando Prisma como un ORM. El frontend se inicia con Create React App y el backend está escrito en TypeScript.
+Este proyecto extiende la infraestructura como código utilizando Terraform para implementar un canal de monitorización de Datadog en AWS. El ejercicio implementa técnicas de prompt engineering para automatizar la generación de código, permitiendo monitorear y obtener insights valiosos de la infraestructura AWS de manera automatizada.
 
-## Explicación de Directorios y Archivos
+## 📋 Objetivo del Ejercicio
 
-- `backend/`: Contiene el código del lado del servidor escrito en Node.js.
-  - `src/`: Contiene el código fuente para el backend.
-    - `index.ts`: El punto de entrada para el servidor backend.
-    - `application/`: Contiene la lógica de aplicación.
-    - `domain/`: Contiene la lógica de negocio.
-    - `infrastructure/`: Contiene código que se comunica con la base de datos.
-    - `presentation/`: Contiene código relacionado con la capa de presentación (como controladores).
-    - `routes/`: Contiene las definiciones de rutas para la API.
-    - `tests/`: Contiene archivos de prueba.
-  - `prisma/`: Contiene el archivo de esquema de Prisma para ORM.
-  - `tsconfig.json`: Archivo de configuración de TypeScript.
-- `frontend/`: Contiene el código del lado del cliente escrito en React.
-  - `src/`: Contiene el código fuente para el frontend.
-  - `public/`: Contiene archivos estáticos como el archivo HTML e imágenes.
-  - `build/`: Contiene la construcción lista para producción del frontend.
-- `.env`: Contiene las variables de entorno.
-- `docker-compose.yml`: Contiene la configuración de Docker Compose para gestionar los servicios de tu aplicación.
-- `README.md`: Este archivo, contiene información sobre el proyecto e instrucciones sobre cómo ejecutarlo.
+Extender el código Terraform existente para:
+- ✅ Configurar la integración de Datadog con AWS usando Terraform
+- ✅ Instalar el agente Datadog en las instancias EC2
+- ✅ Crear un dashboard en Datadog para visualizar métricas clave de AWS
 
-## Estructura del Proyecto
+## 🚀 Características Implementadas
 
-El proyecto está dividido en dos directorios principales: `frontend` y `backend`.
+### ✅ Integración AWS-Datadog
+- Configuración completa del proveedor Datadog en Terraform
+- IAM role con permisos necesarios para la integración
+- Políticas personalizadas para métricas específicas de AWS
+- Configuración de filtros por tags y external ID
+- Integración con account ID: `275057777757`
 
-### Frontend
+### ✅ Agente Datadog en EC2
+- Instalación automática del agente Datadog en ambas instancias
+- Configuración para monitoreo de contenedores Docker
+- Variables de entorno para API key y site
+- Integración con scripts de user_data existentes
+- Configuración de métricas de sistema y aplicación
 
-El frontend es una aplicación React y sus archivos principales están ubicados en el directorio `src`. El directorio `public` contiene activos estáticos y el directorio `build` contiene la construcción de producción de la aplicación.
+### ✅ Dashboard de Monitoreo
+- Dashboard completo con métricas clave de AWS
+- Monitoreo de CPU, memoria, red y disco
+- Métricas de contenedores Docker
+- Widgets de resumen y tiempo de respuesta
+- Layout ordenado con widgets de 12x8
 
-### Backend
+### ✅ Alertas y Monitores
+- Alerta de CPU alta (>80% crítico, >70% warning)
+- Alerta de memoria alta (>80% crítico, >70% warning)
+- Configuración de escalación y renotificación
+- Monitores con umbrales de 5 minutos para evitar falsos positivos
 
-El backend es una aplicación Express escrita en TypeScript. El directorio `src` contiene el código fuente, dividido en varios subdirectorios:
-
-- `application`: Contiene la lógica de aplicación.
-- `domain`: Contiene los modelos de dominio.
-- `infrastructure`: Contiene código relacionado con la infraestructura.
-- `presentation`: Contiene código relacionado con la capa de presentación.
-- `routes`: Contiene las rutas de la aplicación.
-- `tests`: Contiene las pruebas de la aplicación.
-
-El directorio `prisma` contiene el esquema de Prisma.
-
-Tienes más información sobre buenas prácticas utilizadas en la [guía de buenas prácticas](./backend/ManifestoBuenasPracticas.md).
-
-Las especificaciones de todos los endpoints de API los tienes en [api-spec.yaml](./backend/api-spec.yaml).
-
-La descripción y diagrama del modelo de datos los tienes en [ModeloDatos.md](./backend/ModeloDatos.md).
-
-
-## Primeros Pasos
-
-Para comenzar con este proyecto, sigue estos pasos:
-
-1. Clona el repositorio.
-2. Instala las dependencias para el frontend y el backend:
-```sh
-cd frontend
-npm install
-
-cd ../backend
-npm install
-```
-3. Construye el servidor backend:
-```
-cd backend
-npm run build
-````
-4. Inicia el servidor backend:
-```
-cd backend
-npm start
-```
-5. En una nueva ventana de terminal, construye el servidor frontend:
-```
-cd frontend
-npm run build
-```
-6. Inicia el servidor frontend:
-```
-cd frontend
-npm start
-```
-
-El servidor backend estará corriendo en http://localhost:3010 y el frontend estará disponible en http://localhost:3000.
-
-## Docker y PostgreSQL
-
-Este proyecto usa Docker para ejecutar una base de datos PostgreSQL. Así es cómo ponerlo en marcha:
-
-Instala Docker en tu máquina si aún no lo has hecho. Puedes descargarlo desde aquí.
-Navega al directorio raíz del proyecto en tu terminal.
-Ejecuta el siguiente comando para iniciar el contenedor Docker:
-```
-docker-compose up -d
-```
-Esto iniciará una base de datos PostgreSQL en un contenedor Docker. La bandera -d corre el contenedor en modo separado, lo que significa que se ejecuta en segundo plano.
-
-Para acceder a la base de datos PostgreSQL, puedes usar cualquier cliente PostgreSQL con los siguientes detalles de conexión:
- - Host: localhost
- - Port: 5432
- - User: postgres
- - Password: password
- - Database: mydatabase
-
-Por favor, reemplaza User, Password y Database con el usuario, la contraseña y el nombre de la base de datos reales especificados en tu archivo .env.
-
-Para detener el contenedor Docker, ejecuta el siguiente comando:
-```
-docker-compose down
-```
-
-Para generar la base de datos utilizando Prisma, sigue estos pasos:
-
-1. Asegúrate de que el archivo `.env` en el directorio raíz del backend contenga la variable `DATABASE_URL` con la cadena de conexión correcta a tu base de datos PostgreSQL. Si no te funciona, prueba a reemplazar la URL completa directamente en `schema.prisma`, en la variable `url`.
-
-2. Abre una terminal y navega al directorio del backend donde se encuentra el archivo `schema.prisma` y `seed.ts`.
-
-3. Ejecuta los siguientes comandos para generar la estructura de prisma, las migraciones a tu base de datos y poblarla con datos de ejemplo:
-```
-npx prisma generate
-npx prisma migrate dev
-ts-node seed.ts
-```
-
-Una vez has dado todos los pasos, deberías poder guardar nuevos candidatos, tanto via web, como via API, verlos en la base de datos y obtenerlos mediante GET por id. 
+## 📁 Estructura de Archivos
 
 ```
-POST http://localhost:3010/candidates
-{
-    "firstName": "Albert",
-    "lastName": "Saelices",
-    "email": "albert.saelices@gmail.com",
-    "phone": "656874937",
-    "address": "Calle Sant Dalmir 2, 5ºB. Barcelona",
-    "educations": [
-        {
-            "institution": "UC3M",
-            "title": "Computer Science",
-            "startDate": "2006-12-31",
-            "endDate": "2010-12-26"
-        }
-    ],
-    "workExperiences": [
-        {
-            "company": "Coca Cola",
-            "position": "SWE",
-            "description": "",
-            "startDate": "2011-01-13",
-            "endDate": "2013-01-17"
-        }
-    ],
-    "cv": {
-        "filePath": "uploads/1715760936750-cv.pdf",
-        "fileType": "application/pdf"
-    }
-}
+tf/
+├── provider.tf              # Configuración de proveedores AWS y Datadog
+├── variables.tf             # Variables de configuración
+├── datadog.tf              # Integración AWS-Datadog
+├── datadog_dashboard.tf    # Dashboard y monitores de Datadog
+├── ec2.tf                  # Instancias EC2 (actualizado)
+├── iam.tf                  # Roles y políticas IAM
+├── s3.tf                   # Bucket S3
+├── security_groups.tf       # Security groups
+└── scripts/
+    ├── backend_user_data.sh   # Script de inicialización backend (actualizado)
+    └── frontend_user_data.sh  # Script de inicialización frontend (actualizado)
 ```
 
+## 🔧 Configuración Inicial
+
+### Prerrequisitos
+- Cuenta AWS (capa gratuita)
+- Terraform instalado
+- Cuenta Datadog (prueba gratuita disponible)
+- Credenciales AWS configuradas
+
+### Variables Requeridas
+
+Crea un archivo `terraform.tfvars` con tus credenciales:
+
+```hcl
+datadog_api_key = "tu_api_key_de_datadog"
+datadog_app_key = "tu_app_key_de_datadog"
+datadog_site    = "datadoghq.com"  # o tu región específica
+```
+
+### Despliegue
+
+```bash
+# Inicializar Terraform
+terraform init
+
+# Planificar cambios
+terraform plan
+
+# Aplicar configuración
+terraform apply
+```
+
+## 📊 Dashboard de Datadog
+
+El dashboard incluye las siguientes métricas:
+
+### Métricas de Sistema
+- **CPU Utilization**: Uso de CPU por instancia EC2
+- **Memory Utilization**: Uso de memoria por host
+- **Network Traffic**: Tráfico de red entrante y saliente
+- **Disk Usage**: Lectura y escritura de disco
+
+### Métricas de Aplicación
+- **Docker Containers**: Estado de contenedores ejecutándose
+- **Application Response Time**: Tiempo de respuesta de aplicaciones
+- **Instance Count**: Total de instancias EC2
+
+### 📸 Capturas de Pantalla del Dashboard
+
+A continuación se muestran las capturas de pantalla del dashboard de Datadog con las métricas recogidas por el agente:
+
+#### Dashboard Principal
+![Dashboard Principal](images_dashboards/dashboard.png)
+
+#### Métricas de CPU
+![Uso de CPU](images_dashboards/CPUUsage.png)
+
+#### Métricas de Memoria
+![Uso de Memoria](images_dashboards/MemorySpace.png)
+![Alto Uso de Memoria](images_dashboards/HihgMemoryUsage.png)
+![Tráfico de Memoria](images_dashboards/MemoryTraffic.png)
+
+#### Métricas de Disco
+![Uso de Disco](images_dashboards/DiskUsage.png)
+![Latencia de Disco](images_dashboards/DiskLatency.png)
+
+#### Carga del Sistema
+![Carga del Sistema](images_dashboards/SystemLoad.png)
+
+## 🚨 Alertas Configuradas
+
+### CPU Alta
+- **Warning**: >70% por 5 minutos
+- **Critical**: >80% por 5 minutos
+- **Mensaje**: "CPU usage is high on EC2 instance {{instance-id.name}}"
+
+### Memoria Alta
+- **Warning**: >70% por 5 minutos
+- **Critical**: >80% por 5 minutos
+- **Mensaje**: "Memory usage is high on host {{host.name}}"
+
+### Salud de Contenedores
+- **Critical**: Contenedor no ejecutándose
+- **Mensaje**: "Docker container {{container_name.name}} is not running"
+
+## 🔐 Seguridad
+
+- Variables sensibles marcadas como `sensitive = true`
+- External ID para la integración AWS-Datadog
+- IAM role con permisos mínimos necesarios
+- Políticas específicas para cada servicio AWS
+
+## 📈 Métricas Monitoreadas
+
+### AWS EC2
+- `aws.ec2.cpuutilization`
+- `aws.ec2.networkin` / `aws.ec2.networkout`
+- `aws.ec2.diskreadbytes` / `aws.ec2.diskwritebytes`
+- `aws.ec2.instance_count`
+
+### Sistema
+- `system.mem.used`
+- `system.disk.used`
+
+### Docker
+- `docker.containers.running`
+- `docker.containers.stopped`
+
+### Application Load Balancer
+- `aws.applicationelb.target_response_time`
+
+## 🛠️ Troubleshooting
+
+### Problemas Comunes
+
+1. **Agente Datadog no se instala**
+   - Verificar que las variables `datadog_api_key` y `datadog_site` estén configuradas
+   - Revisar los logs de user_data en CloudWatch
+
+2. **Métricas no aparecen en Datadog**
+   - Verificar que la integración AWS esté configurada correctamente
+   - Confirmar que el IAM role tenga los permisos necesarios
+
+3. **Alertas no funcionan**
+   - Verificar que los monitores estén activos en Datadog
+   - Confirmar que las métricas estén llegando correctamente
+
+### Logs Útiles
+
+```bash
+# Logs del agente Datadog
+sudo journalctl -u datadog-agent -f
+
+# Estado del agente
+sudo datadog-agent status
+
+# Configuración del agente
+sudo datadog-agent config
+```
+
+## 📚 Documentación Adicional
+
+- [Prompts utilizados](prompts/datadog-aws-prompts.md)
+- [Documentación oficial de Datadog](https://docs.datadoghq.com/)
+- [Terraform Datadog Provider](https://registry.terraform.io/providers/DataDog/datadog/latest/docs)
+
+## 🤝 Contribuciones
+
+Para contribuir al proyecto:
+
+1. Crea una nueva rama con tus iniciales
+2. Realiza los cambios necesarios
+3. Actualiza la documentación
+4. Crea un Pull Request
+
+## 📝 Notas de Implementación
+
+- El proyecto utiliza técnicas de prompt engineering para automatizar la generación de código
+- La configuración es declarativa y reproducible
+- Se mantiene compatibilidad con la infraestructura existente
+- Se implementan mejores prácticas de seguridad y monitoreo
+
+## 🚧 Desafíos Encontrados y Soluciones
+
+### 1. **Configuración del Proveedor Datadog**
+**Desafío**: El proveedor Datadog requería configuración específica con `datadog/datadog` en lugar de `hashicorp/datadog`
+**Solución**: Actualizar la configuración del proveedor con la fuente correcta y versión compatible
+
+### 2. **Integración AWS-Datadog**
+**Desafío**: La sintaxis del recurso `datadog_integration_aws_account` cambió significativamente en versiones recientes
+**Solución**: Adaptar la configuración a la nueva sintaxis con bloques anidados para `auth_config`, `aws_regions`, etc.
+
+### 3. **Dashboard Layout**
+**Desafío**: Los widgets del dashboard excedían el grid máximo de 12 columnas
+**Solución**: Rediseñar el layout con widgets de 12x8 y distribución vertical
+
+### 4. **Política IAM**
+**Desafío**: La política `DatadogAWSIntegrationPolicy` no existía en AWS
+**Solución**: Crear una política personalizada con todos los permisos necesarios para Datadog
+
+### 5. **Monitores de Alertas**
+**Desafío**: Los umbrales de los monitores no coincidían con las consultas
+**Solución**: Ajustar los umbrales para que coincidan con los valores de las consultas (usar decimales)
+
+### 6. **Instalación de Terraform**
+**Desafío**: Terraform no se instaló correctamente en el PATH del sistema
+**Solución**: Usar la ruta completa del ejecutable descargado
+
+## 📊 Resultados Obtenidos
+
+### Dashboard Creado
+- **Título**: "AWS Infrastructure Monitoring - LTI Project"
+- **ID**: `9qd-aeh-svt`
+- **URL**: Disponible en Datadog Dashboard
+
+### Monitores Activos
+- **CPU Monitor ID**: `219885308`
+- **Memory Monitor ID**: `219885309`
+
+### Integración AWS
+- **Account ID**: `275057777757`
+- **Role**: `datadog-integration-role`
+- **External ID**: Generado automáticamente por Datadog
+
+## 🎯 Próximos Pasos
+
+- [ ] Implementar métricas personalizadas de aplicación
+- [ ] Configurar alertas por email/Slack
+- [ ] Añadir monitoreo de logs de aplicación
+- [ ] Implementar dashboards específicos por entorno
+- [ ] Configurar métricas de costos AWS

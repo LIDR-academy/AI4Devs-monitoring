@@ -1,0 +1,12 @@
+# Variables de configuración para Terraform
+# Copia este archivo como terraform.tfvars y configura tus valores
+
+# Credenciales de Datadog
+datadog_api_key = "tu_api_key_de_datadog_aqui"
+datadog_app_key = "tu_app_key_de_datadog_aqui"
+
+# Configuración de Datadog
+datadog_site = "datadoghq.com"  # Opciones: datadoghq.com, datadoghq.eu, us3.datadoghq.com, us5.datadoghq.com, ap1.datadoghq.com
+
+# URL de API de Datadog (opcional, por defecto usa datadoghq.com)
+# datadog_api_url = "https://api.datadoghq.com/"
