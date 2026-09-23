@@ -5,8 +5,20 @@
 **/node_modules
 **/prompts_master.md
 
+# Terraform state files
+*.tfstate
+*.tfstate.*
+*.tfstate.*.backup
+terraform.tfstate.*
+
+# Terraform directories and lock files
 **/.terraform/
-**/.terraform.lock.hcl  
+**/.terraform.lock.hcl
+
+# Terraform variable files (contain secrets)
+*.tfvars
+!terraform.tfvars.example
+
 
 # other dependencies
 **/.pnp

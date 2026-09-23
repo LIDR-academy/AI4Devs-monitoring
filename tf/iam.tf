@@ -39,3 +39,30 @@ resource "aws_iam_instance_profile" "ec2_instance_profile" {
   name = "lti-project-ec2-instance-profile"
   role = aws_iam_role.ec2_role.name
 }
+
+resource "aws_iam_role" "datadog_integration_role" {
+  name = "DatadogIntegrationRole"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::464622532012:root"
+        }
+        Condition = {
+          StringEquals = {
+            "sts:ExternalId" = var.datadog_app_key
+          }
+        }
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "datadog_aws_integration" {
+  role       = aws_iam_role.datadog_integration_role.name
+  policy_arn = "arn:aws:iam::aws:policy/SecurityAudit"
+}
+

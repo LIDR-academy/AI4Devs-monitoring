@@ -28,5 +28,3 @@
     - Prompt 5
         
         Genera un Codigo en sh para crear un nuevo zip de la carpeta frontend y uno de la carpeta backend reemplazando los zip existentes
-        
-   
